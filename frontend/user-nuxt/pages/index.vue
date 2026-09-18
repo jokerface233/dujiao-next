@@ -1,6 +1,8 @@
 <script setup lang="ts">
-const { data: config } = await useFetch('/api/public/config')
-const siteName = computed(() => config.value?.brand?.site_name || 'Dujiao-Next')
+const { data: config } = await useFetch('/api/v1/public/config')
+const { data: products } = await useFetch('/api/v1/public/products?limit=6')
+
+const siteName = computed(() => config.value?.data?.brand?.site_name || config.value?.brand?.site_name || 'Dujiao-Next')
 useSeoMeta({
   title: 'Home',
   description: 'Dujiao-Next storefront homepage rendered by Nuxt SSR',
@@ -39,6 +41,19 @@ useSeoMeta({
           <p>The Nuxt app keeps using the existing backend without forcing a full rewrite.</p>
         </article>
       </div>
+
+      <section v-if="products && Array.isArray(products.data || products)" class="mt-4">
+        <h2>Featured Items</h2>
+        <div class="grid">
+          <article v-for="product in (products.data || products).slice(0, 6)" :key="product.slug || product.id" class="card">
+            <span class="tag">{{ product.category || 'Featured' }}</span>
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.description }}</p>
+            <p class="mt-4"><strong>{{ product.price || product.sale_price || '$0.00' }}</strong></p>
+            <NuxtLink :to="`/products/${product.slug || product.id}`">View product</NuxtLink>
+          </article>
+        </div>
+      </section>
     </div>
   </div>
 </template>

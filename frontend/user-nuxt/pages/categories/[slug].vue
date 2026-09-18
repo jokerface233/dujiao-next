@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const route = useRoute()
 const slug = computed(() => String(route.params.slug || ''))
-const { data: category } = await useFetch(`/api/v1/public/categories/${slug.value || 'featured'}`)
-const categoryDetail = computed(() => category.value?.data || category.value || null)
+const { data: category } = await usePublicApi(`/public/categories/${slug.value || 'featured'}`)
+const categoryDetail = computed(() => category.value || null)
 useSeoMeta({
   title: () => categoryDetail.value?.name || 'Category',
   description: () => categoryDetail.value?.description || 'Category landing page'

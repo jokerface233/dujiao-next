@@ -1,8 +1,8 @@
 <script setup lang="ts">
-const { data: config } = await useFetch('/api/v1/public/config')
-const { data: products } = await useFetch('/api/v1/public/products?limit=6')
-
-const siteName = computed(() => config.value?.data?.brand?.site_name || config.value?.brand?.site_name || 'Dujiao-Next')
+const { data: config } = await usePublicApi('/public/config')
+const { data: products } = await usePublicApi('/public/products', { limit: 6 })
+const catalog = computed(() => Array.isArray(products.value) ? products.value : [])
+const siteName = computed(() => config.value?.brand?.site_name || config.value?.site_name || 'Dujiao-Next')
 useSeoMeta({
   title: 'Home',
   description: 'Dujiao-Next storefront homepage rendered by Nuxt SSR',
@@ -42,10 +42,10 @@ useSeoMeta({
         </article>
       </div>
 
-      <section v-if="products && Array.isArray(products.data || products)" class="mt-4">
+      <section v-if="catalog.length" class="mt-4">
         <h2>Featured Items</h2>
         <div class="grid">
-          <article v-for="product in (products.data || products).slice(0, 6)" :key="product.slug || product.id" class="card">
+          <article v-for="product in catalog.slice(0, 6)" :key="product.slug || product.id" class="card">
             <span class="tag">{{ product.category || 'Featured' }}</span>
             <h3>{{ product.name }}</h3>
             <p>{{ product.description }}</p>

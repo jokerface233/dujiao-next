@@ -1,9 +1,6 @@
 <script setup lang="ts">
-const { data: products } = await useFetch('/api/v1/public/products')
-const items = computed(() => {
-  const raw = products.value?.data || products.value || []
-  return Array.isArray(raw) ? raw : []
-})
+const { data: products } = await usePublicApi('/public/products')
+const items = computed(() => Array.isArray(products.value) ? products.value : [])
 useSeoMeta({
   title: 'Products',
   description: 'Browse product listings from the Dujiao-Next storefront.'

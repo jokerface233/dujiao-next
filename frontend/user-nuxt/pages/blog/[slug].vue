@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const route = useRoute()
 const slug = computed(() => String(route.params.slug || ''))
-const { data: post } = await useFetch(`/api/v1/public/posts/${slug.value || 'welcome-to-dujiao-next'}`)
-const postDetail = computed(() => post.value?.data || post.value || null)
+const { data: post } = await usePublicApi(`/public/posts/${slug.value || 'welcome-to-dujiao-next'}`)
+const postDetail = computed(() => post.value || null)
 useSeoMeta({
   title: () => postDetail.value?.title || 'Blog Post',
   description: () => postDetail.value?.summary || 'Blog detail page'

@@ -1,9 +1,8 @@
 <script setup lang="ts">
 const route = useRoute()
 const slug = computed(() => String(route.params.slug || ''))
-const { data: product } = await useFetch(`/api/v1/public/products/${slug.value || 'demo-product'}`)
-const productDetail = computed(() => product.value?.data || product.value || null)
-
+const { data: product } = await usePublicApi(`/public/products/${slug.value || 'demo-product'}`)
+const productDetail = computed(() => product.value || null)
 useSeoMeta({
   title: () => productDetail.value?.name || 'Product Detail',
   description: () => productDetail.value?.description || 'Product detail page'

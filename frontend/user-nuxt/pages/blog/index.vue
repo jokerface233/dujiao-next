@@ -1,9 +1,6 @@
 <script setup lang="ts">
-const { data: posts } = await useFetch('/api/v1/public/posts')
-const items = computed(() => {
-  const raw = posts.value?.data || posts.value || []
-  return Array.isArray(raw) ? raw : []
-})
+const { data: posts } = await usePublicApi('/public/posts')
+const items = computed(() => Array.isArray(posts.value) ? posts.value : [])
 useSeoMeta({
   title: 'Blog',
   description: 'The newsroom and blog rendered with Nuxt server-side rendering.'
